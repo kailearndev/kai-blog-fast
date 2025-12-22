@@ -1,3 +1,4 @@
+import Layout from "@/components/layout";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
@@ -14,9 +15,9 @@ interface AuthRouterContext {
 
 export const Route = createRootRouteWithContext<AuthRouterContext>()({
   component: () => (
-    <div>
+    <Layout>
       <Outlet />
       <TanStackRouterDevtools />
-    </div>
+    </Layout>
   ),
 });

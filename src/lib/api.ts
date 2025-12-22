@@ -33,6 +33,7 @@ api.interceptors.response.use(
   (error) => {
     // Ví dụ: Nếu Backend trả về 401 (Hết hạn hoặc Token sai)
     if (error.response?.status === 401) {
+      window.location.href = "/login";
       console.error("Lỗi xác thực, vui lòng đăng nhập lại.");
       // Bạn có thể redirect về trang login hoặc logout tại đây
     }

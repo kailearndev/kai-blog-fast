@@ -6,11 +6,20 @@ import { createRoot } from "react-dom/client";
 import { AuthProvider, useAuth } from "./auth";
 import { ThemeProvider } from "./components/theme-provider";
 import "./index.css";
-import { router } from "./routes/router";
+import { router } from "./routes/_router";
+
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 
 // Create a new router instance
 
 // Register the router instance for type safety
+const queryClient = new QueryClient();
 
 function InnerApp() {
   const auth = useAuth();
@@ -19,10 +28,12 @@ function InnerApp() {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AuthProvider>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <InnerApp />
-      </ThemeProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <InnerApp />
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   </StrictMode>
 );
