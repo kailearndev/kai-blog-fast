@@ -1,9 +1,18 @@
-export function App() {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="font-medium">Hello World</div>
-    </div>
-  )
+import { RouterProvider } from "@tanstack/react-router";
+import { AuthProvider, useAuth } from "./auth";
+import { router } from "./routes/router";
+
+function InnerApp() {
+  const auth = useAuth();
+  return <RouterProvider router={router} context={{ auth }} />;
 }
 
-export default App
+function App() {
+  return (
+    <AuthProvider>
+      <InnerApp />
+    </AuthProvider>
+  );
+}
+
+export default App;
