@@ -1,3 +1,4 @@
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -117,10 +118,10 @@ const CreatePost = () => {
               <FormItem className="col-span-3 ">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  {/* <SimpleEditor
+                  <SimpleEditor
                     onChange={field.onChange}
                     content={field.value}
-                  /> */}
+                  />
                 </FormControl>
                 <FormDescription>
                   This is the main content of the post.

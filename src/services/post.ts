@@ -27,8 +27,21 @@ const createPost = async (postData: Partial<IPost>): Promise<IPost> => {
     throw error;
   }
 };
+
+const updatePost = async (
+  id: string,
+  postData: Partial<IPost>
+): Promise<IPost> => {
+  try {
+    const response = await api.put(`/admin/posts/${id}`, postData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const PostService = {
   getPosts,
   getPostById,
   createPost,
+  updatePost,
 };
