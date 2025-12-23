@@ -6,14 +6,7 @@ import { PlusCircleIcon } from "lucide-react";
 import { columns } from "./components/columns";
 
 const ListPost = () => {
-  const { data, isLoading, isError, error } = usePosts();
-  if (isLoading) {
-    return <div className="text-white">Loading posts...</div>;
-  }
-
-  if (isError) {
-    return <div>Error: {error.message}</div>;
-  }
+  const { data } = usePosts();
 
   return (
     <div>
@@ -29,9 +22,6 @@ const ListPost = () => {
         }
         columns={columns}
         data={data}
-        handleDelete={(ids) => {
-          console.log("Delete posts with ids:", ids);
-        }}
       />
     </div>
   );
