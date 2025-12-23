@@ -1,4 +1,5 @@
 import { routeTree } from "@/routeTree.gen";
+import { QueryClient } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 
 export const router = createRouter({
@@ -6,6 +7,7 @@ export const router = createRouter({
   context: {
     // auth will be passed down from App component
     auth: undefined!,
+    queryClient: new QueryClient(),
   },
 });
 

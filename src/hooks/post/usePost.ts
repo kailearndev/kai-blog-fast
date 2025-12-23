@@ -1,10 +1,10 @@
 import { PostService } from "@/services/post";
-import { useQuery } from "@tanstack/react-query"
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
+const postsQueryOptions = () =>
+  queryOptions({
+    queryKey: ["posts"],
+    queryFn: PostService.getPosts,
+  });
 
-export const usePosts = () => {
-    return useQuery({
-        queryKey: ['posts'],
-        queryFn: PostService.getPosts,
-    });
-}
+export const usePosts = () => useSuspenseQuery(postsQueryOptions());

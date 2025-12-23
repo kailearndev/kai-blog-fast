@@ -1,0 +1,14 @@
+import { postQueryOptions } from "@/routes/post/$id";
+import { useSuspenseQuery } from "@tanstack/react-query";
+
+const PostDetail = ({ id }: { id: string }) => {
+  const { data } = useSuspenseQuery(postQueryOptions(id));
+  return (
+    <div>
+      <h1>{data.title}</h1>
+      <p>{data.content}</p>
+    </div>
+  );
+};
+
+export default PostDetail;
