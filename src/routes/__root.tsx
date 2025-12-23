@@ -1,5 +1,5 @@
+import GlobalLoading from "@/components/global-loading";
 import Layout from "@/components/layout";
-import GlobalLoading from "@/components/loading";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
