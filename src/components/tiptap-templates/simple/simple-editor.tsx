@@ -70,14 +70,15 @@ import { useWindowSize } from "@/hooks/use-window-size";
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle";
 
 // --- Lib ---
-import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
-
+// import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
+import { handleImageUpload } from "@/services/upload";
 // --- Styles ---
 import "@/components/tiptap-templates/simple/simple-editor.scss";
 
 interface SimpleEditorProps {
   content?: string; // Nội dung ban đầu
   onChange?: (html: string) => void; // Hàm callback để trả data về
+  imageFolder?: string; // Thư mục upload ảnh
 }
 
 const MainToolbarContent = ({
@@ -188,7 +189,11 @@ const MobileToolbarContent = ({
   </>
 );
 
-export function SimpleEditor({ content, onChange }: SimpleEditorProps) {
+export default function SimpleEditor({
+  content,
+  onChange,
+  imageFolder,
+}: SimpleEditorProps) {
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
@@ -231,9 +236,9 @@ export function SimpleEditor({ content, onChange }: SimpleEditorProps) {
       Selection,
       ImageUploadNode.configure({
         accept: "image/*",
-        maxSize: MAX_FILE_SIZE,
-        limit: 3,
-        upload: handleImageUpload,
+        maxSize: 5 * 1024 * 1024, // 5MB
+
+        upload: (file) => handleImageUpload(file, imageFolder || "post"),
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],

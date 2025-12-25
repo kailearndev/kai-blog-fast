@@ -1,19 +1,3 @@
-// import { postQueryOptions } from "@/routes/post/$id";
-// import { useSuspenseQuery } from "@tanstack/react-query";
-
-// const PostDetail = ({ id }: { id: string }) => {
-//   const { data } = useSuspenseQuery(postQueryOptions(id));
-//   return (
-//     <div>
-//       <h1>{data.title}</h1>
-//       <p>{data.content}</p>
-//     </div>
-//   );
-// };
-
-// export default PostDetail;
-
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -35,10 +19,13 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
+import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
-
+const Editor = React.lazy(
+  () => import("@/components/tiptap-templates/simple/simple-editor")
+);
 const PostDetail = ({ id }: { id: string }) => {
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(postQueryOptions(id));
@@ -140,10 +127,9 @@ const PostDetail = ({ id }: { id: string }) => {
               <FormItem className="col-span-3 ">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <SimpleEditor
-                    onChange={field.onChange}
-                    content={field.value}
-                  />
+                  <React.Suspense fallback={<div>Loading editor...</div>}>
+                    <Editor onChange={field.onChange} content={field.value} />
+                  </React.Suspense>
                 </FormControl>
                 <FormDescription>
                   This is the main content of the post.

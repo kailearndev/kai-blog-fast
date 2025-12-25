@@ -39,9 +39,18 @@ const updatePost = async (
     throw error;
   }
 };
+const deletePost = async (id: string) => {
+  try {
+    const response = await api.delete(`/admin/posts/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const PostService = {
   getPosts,
   getPostById,
   createPost,
   updatePost,
+  deletePost,
 };

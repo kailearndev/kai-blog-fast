@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { SearchForm } from "@/components/search-form";
-import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -15,13 +14,15 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { NavUser } from "./nav-user";
+import { VersionSwitcher } from "@/components/version-switcher";
 import { Link } from "@tanstack/react-router";
-import { PoundSterling } from "lucide-react";
+import clsx from "clsx";
+import { Feather } from "lucide-react";
+import { NavUser } from "./nav-user";
 
 // This is sample data.
 const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
+  versions: ["1.0.0"],
   navMain: [
     {
       title: "Post",
@@ -31,66 +32,10 @@ const data = {
           title: "All Posts",
           url: "/post/list",
           isActive: true,
-          icon: <PoundSterling />,
+          icon: <Feather className={clsx("h-4 w-4")} />,
         },
       ],
     },
-    // {
-    //   title: "API Reference",
-    //   url: "#",
-    //   items: [
-    //     {
-    //       title: "Components",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "File Conventions",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Functions",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "next.config.js Options",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "CLI",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Edge Runtime",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
-    // {
-    //   title: "Architecture",
-    //   url: "#",
-    //   items: [
-    //     {
-    //       title: "Accessibility",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Fast Refresh",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Next.js Compiler",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Supported Browsers",
-    //       url: "#",
-    //     },
-    //     {
-    //       title: "Turbopack",
-    //       url: "#",
-    //     },
-    //   ],
-    // },
   ],
 };
 
@@ -113,7 +58,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={item.isActive}
+                      className={
+                        item.isActive ? "bg-gray-200 dark:bg-gray-700 " : ""
+                      }
+                    >
                       <Link className="flex justify-between" to={item.url}>
                         {item.title} {item.icon}
                       </Link>

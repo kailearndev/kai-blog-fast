@@ -1,4 +1,3 @@
-import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,9 +14,13 @@ import { PostService } from "@/services/post";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
+import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+const Editor = React.lazy(
+  () => import("@/components/tiptap-templates/simple/simple-editor")
+);
 const CreatePost = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -118,10 +121,9 @@ const CreatePost = () => {
               <FormItem className="col-span-3 ">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <SimpleEditor
-                    onChange={field.onChange}
-                    content={field.value}
-                  />
+                  <React.Suspense fallback={<div>Loading editor...</div>}>
+                    <Editor onChange={field.onChange} content={field.value} />
+                  </React.Suspense>
                 </FormControl>
                 <FormDescription>
                   This is the main content of the post.

@@ -1,5 +1,6 @@
 "use client";
 
+import { DeleteAction } from "@/components/delete-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,10 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PostService } from "@/services/post";
 import type { IPost } from "@/types/post-type";
 import { Link } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
-import { Edit2Icon, MoreHorizontal, Trash2Icon } from "lucide-react";
+import { Edit2Icon, MoreHorizontal } from "lucide-react";
 
 export const columns: ColumnDef<IPost>[] = [
   // {
@@ -86,9 +88,14 @@ export const columns: ColumnDef<IPost>[] = [
                 {`Edit`} <Edit2Icon />
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem className="cursor-pointer flex justify-between hover:bg-red-500">
-              {`Delete `} <Trash2Icon />
-            </DropdownMenuItem>
+
+            <DeleteAction
+              id={row.original.id}
+              mutationFn={(id) =>
+                PostService.updatePost(id, { is_public: false })
+              }
+              queryKey={["posts"]}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       );
