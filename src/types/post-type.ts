@@ -6,4 +6,5 @@ export interface IPost {
   is_public: boolean;
   created_at: string;
   updated_at: string;
+  thumbnail?: string;
 }

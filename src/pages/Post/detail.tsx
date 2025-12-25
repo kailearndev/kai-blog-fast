@@ -1,3 +1,4 @@
+import InputUpload from "@/components/input-upload";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -41,17 +42,15 @@ const PostDetail = ({ id }: { id: string }) => {
     slug: z.string().min(2, {
       message: "Slug must be at least 2 characters.",
     }),
+    thumbnail: z.string().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: standardSchemaResolver(formSchema),
-    defaultValues: {
-      title: data.title,
-      content: data.content,
-      slug: data.slug,
-      is_public: data.is_public,
-    },
+    values: data,
   });
+
+  console.log(form.getValues());
 
   const createPost = useMutation({
     mutationFn: (data: z.infer<typeof formSchema>) =>
@@ -77,7 +76,7 @@ const PostDetail = ({ id }: { id: string }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-x-6  gap-4 "
+          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-2 md:gap-x-6  gap-4 "
         >
           <FormField
             control={form.control}
@@ -115,6 +114,28 @@ const PostDetail = ({ id }: { id: string }) => {
                 </FormControl>
                 <div>
                   <FormDescription>Slug for landing page URL.</FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="thumbnail"
+            render={({ field }) => (
+              <FormItem className="grid  col-span-3 2xl:col-span-1">
+                <FormLabel>Thumbnail</FormLabel>
+                <FormControl>
+                  <InputUpload
+                    id={"thumbnail-" + data.id}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                </FormControl>
+                <div>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
                   <FormMessage />
                 </div>
               </FormItem>
