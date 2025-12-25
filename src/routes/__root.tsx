@@ -1,6 +1,13 @@
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import GlobalLoading from "@/components/global-loading";
+import Layout from "@/components/layout";
+import type { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import {
+  createRootRouteWithContext,
+  Outlet,
+  useRouterState,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-
 interface AuthState {
   isAuthenticated: boolean;
   user: any;
@@ -8,15 +15,25 @@ interface AuthState {
   logout: () => void;
 }
 
-interface AuthRouterContext {
+interface MyRouterContext {
   auth: AuthState;
+  queryClient: QueryClient;
 }
 
-export const Route = createRootRouteWithContext<AuthRouterContext>()({
-  component: () => (
-    <div>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </div>
-  ),
+export const Route = createRootRouteWithContext<MyRouterContext>()({
+  component: RootRouteComponent,
 });
+
+function RootRouteComponent() {
+  const isLoading = useRouterState({
+    select: (state) => state.status === "pending",
+  });
+  return (
+    <Layout>
+      {isLoading && <GlobalLoading />}
+      <Outlet />
+      <TanStackRouterDevtools position="bottom-left" />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </Layout>
+  );
+}
