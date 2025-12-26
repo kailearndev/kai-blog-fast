@@ -1,3 +1,4 @@
+import InputUpload from "@/components/input-upload";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -35,6 +36,7 @@ const CreatePost = () => {
     slug: z.string().min(2, {
       message: "Slug must be at least 2 characters.",
     }),
+    thumbnail: z.string().url().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,6 +46,7 @@ const CreatePost = () => {
       content: "",
       slug: "",
       is_public: true,
+      thumbnail: "",
     },
   });
 
@@ -71,13 +74,13 @@ const CreatePost = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-x-6  gap-4 "
+          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-2 md:gap-x-6  gap-4 "
         >
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
-              <FormItem className="">
+              <FormItem className="grid col-span-3 lg:col-span-1  ">
                 <FormLabel>Title</FormLabel>
                 <FormControl>
                   <Input
@@ -89,10 +92,26 @@ const CreatePost = () => {
                     value={field.value}
                   />
                 </FormControl>
+
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem className="grid col-span-3 lg:col-span-1  ">
+                <FormLabel>Slug</FormLabel>
+                <FormControl>
+                  <Input placeholder="post-slug" disabled value={field.value} />
+                </FormControl>
                 <div>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>Slug for landing page URL.</FormDescription>
                   <FormMessage />
                 </div>
               </FormItem>
@@ -100,15 +119,17 @@ const CreatePost = () => {
           />
           <FormField
             control={form.control}
-            name="slug"
+            name="thumbnail"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Slug</FormLabel>
+              <FormItem className="grid  col-span-3 2xl:col-span-1">
+                <FormLabel>Thumbnail</FormLabel>
                 <FormControl>
-                  <Input placeholder="post-slug" disabled value={field.value} />
+                  <InputUpload id={"thumbnail"} onChange={field.onChange} />
                 </FormControl>
                 <div>
-                  <FormDescription>Slug for landing page URL.</FormDescription>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
                   <FormMessage />
                 </div>
               </FormItem>
@@ -125,10 +146,12 @@ const CreatePost = () => {
                     <Editor onChange={field.onChange} content={field.value} />
                   </React.Suspense>
                 </FormControl>
-                <FormDescription>
-                  This is the main content of the post.
-                </FormDescription>
-                <FormMessage />
+                <div>
+                  <FormDescription>
+                    This is the main content of the post.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
