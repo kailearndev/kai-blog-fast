@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { slugify } from "@/lib/slugify";
-import { postQueryOptions } from "@/routes/post/$id";
+import { postQueryOptions } from "@/routes/_authenticated/post/$id";
 import { PostService } from "@/services/post";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import {

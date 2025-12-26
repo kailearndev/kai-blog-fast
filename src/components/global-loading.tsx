@@ -1,7 +1,12 @@
+// components/global-loading.tsx
+import { Loader2 } from "lucide-react";
+
 export default function GlobalLoading() {
   return (
-    <div className="flex justify-center items-center absolute w-full h-full  top-0 left-0 bg-black bg-opacity-50 z-50">
-      <div className="w-8 h-8 border-4 border-dashed rounded-full animate-spin border-blue-300"></div>
+    // Dùng absolute inset-0 để nó bung ra vừa khít với cái thẻ div "relative" ở bước 1
+    // bg-background/50 tạo hiệu ứng mờ nội dung cũ đi
+    <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+      <Loader2 className="h-10 w-10 animate-spin text-primary" />
     </div>
   );
 }

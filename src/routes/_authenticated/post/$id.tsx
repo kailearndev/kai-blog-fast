@@ -9,7 +9,7 @@ export const postQueryOptions = (postId: string) =>
     queryFn: () => PostService.getPostById(postId),
   });
 
-export const Route = createFileRoute("/post/$id")({
+export const Route = createFileRoute("/_authenticated/post/$id")({
   component: RouteComponent,
   loader: ({ context: { queryClient }, params }) => {
     return queryClient.ensureQueryData(postQueryOptions(params.id));

@@ -13,9 +13,11 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (search) => ({
-    redirect: (search.redirect as string) || "/",
-  }),
+  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
+    return {
+      redirect: (search.redirect as string) || undefined,
+    };
+  },
   beforeLoad: ({ context, search }) => {
     // Redirect if already authenticated
     if (context.auth.isAuthenticated) {
@@ -33,7 +35,7 @@ function LoginComponent() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const search = Route.useSearch(); // Access search params
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -43,10 +45,7 @@ function LoginComponent() {
       await auth.login(email, password);
       // Navigate to the redirect URL using router navigation
       navigate({
-        to: redirect,
-        search: {
-          redirect: "/",
-        },
+        to: search.redirect || "/post/list", // Dynamic redirect
       });
     } catch (err) {
       setError("Invalid username or password");

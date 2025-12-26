@@ -53,6 +53,7 @@ api.interceptors.response.use(
           // Unauthorized: Token hết hạn hoặc chưa đăng nhập
           console.error("Session has expired, please log in again.");
           toast.error("Session has expired, please log in again.");
+
           // Xử lý: Xóa token và đá về trang login
           // localStorage.removeItem("token");
           window.location.href = "/login";

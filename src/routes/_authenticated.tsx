@@ -1,4 +1,11 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import GlobalLoading from "@/components/global-loading";
+import Layout from "@/components/layout";
+import {
+  createFileRoute,
+  Outlet,
+  redirect,
+  useRouterState,
+} from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: ({ context, location }) => {
@@ -12,5 +19,20 @@ export const Route = createFileRoute("/_authenticated")({
       });
     }
   },
-  component: () => <Outlet />,
+  component: AuthenticatedLayout,
 });
+function AuthenticatedLayout() {
+  // 2. Lấy trạng thái loading ngay tại đây
+  const isLoading = useRouterState({
+    select: (state) => state.status === "pending",
+  });
+
+  return (
+    <Layout>
+      {/* 4. Loading nằm đè lên Outlet, nhưng nằm TRONG Layout */}
+      {isLoading && <GlobalLoading />}
+
+      <Outlet />
+    </Layout>
+  );
+}

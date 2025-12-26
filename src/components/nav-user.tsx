@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 
+import { useAuth } from "@/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -25,14 +26,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAuth } from "@/auth";
+import { useRouter } from "@tanstack/react-router";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, logout } = useAuth();
-
-  console.log(user);
-
+  const navigate = useRouter();
+  const handleLogout = async () => {
+    await logout();
+    navigate.navigate({ to: "/login" });
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -100,8 +103,8 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut onClick={logout} />
+            <DropdownMenuItem onClick={handleLogout}>
+              <LogOut />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

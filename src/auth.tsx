@@ -53,7 +53,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+
+    if (error) {
+      console.error("Error during logout:", error.message);
+      throw error;
+    }
+
     // Không cần setUser(null) ở đây vì onAuthStateChange sẽ tự làm việc đó
   };
 
