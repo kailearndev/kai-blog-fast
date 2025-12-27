@@ -1,7 +1,8 @@
 import api from "@/lib/api";
 import type { IPost } from "@/types/post-type";
+import type { PaginatedResponse } from "@/types/response";
 
-const getPosts = async (): Promise<IPost[]> => {
+const getPosts = async (): Promise<PaginatedResponse<IPost>> => {
   try {
     const response = await api.get("/admin/posts/");
     return response.data;

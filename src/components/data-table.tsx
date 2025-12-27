@@ -5,6 +5,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  type OnChangeFn,
+  type PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -23,17 +25,30 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   actions?: React.ReactNode;
+  rowCount: number;
+  pagination: PaginationState;
+  onPaginationChange: OnChangeFn<PaginationState>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   actions,
+  rowCount,
+  pagination,
+  onPaginationChange,
 }: DataTableProps<TData, TValue>) {
+  const pageCount = Math.ceil(rowCount / pagination.pageSize);
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    manualPagination: true, // Bắt buộc: bảo table là "tao tự quản lý trang"
+    pageCount: pageCount > 0 ? pageCount : 1,
+    state: {
+      pagination,
+    },
+    onPaginationChange,
     getPaginationRowModel: getPaginationRowModel(),
   });
 
@@ -90,8 +105,14 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      {table.getPageCount() > 1 && (
-        <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center justify-between py-4">
+        {/* Hiển thị thông tin trang hiện tại */}
+        <div className="text-sm text-gray-500">
+          Page {table.getState().pagination.pageIndex + 1} of{" "}
+          {table.getPageCount()}
+        </div>
+
+        <div className="space-x-2">
           <Button
             variant="outline"
             size="sm"
@@ -109,7 +130,7 @@ export function DataTable<TData, TValue>({
             Next
           </Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }

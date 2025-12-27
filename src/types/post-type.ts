@@ -7,4 +7,5 @@ export interface IPost {
   created_at: string;
   updated_at: string;
   thumbnail?: string;
+  tags?: string[];
 }

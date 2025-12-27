@@ -1,6 +1,7 @@
 import type { Session, User } from "@supabase/supabase-js";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
+import toast from "react-hot-toast";
 
 // Thêm Session vào interface để tiện lấy access_token gọi API
 interface AuthState {
@@ -55,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      console.error("Error during logout:", error.message);
+      toast.error("Error logging out: " + error.message);
       throw error;
     }
 

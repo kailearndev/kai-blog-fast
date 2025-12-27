@@ -29,28 +29,21 @@ export const Route = createFileRoute("/login")({
 
 function LoginComponent() {
   const { auth } = Route.useRouteContext();
-  const { redirect } = Route.useSearch();
   const navigate = Route.useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const search = Route.useSearch(); // Access search params
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
 
     try {
       await auth.login(email, password);
       // Navigate to the redirect URL using router navigation
       navigate({
-        to: search.redirect || "/post/list", // Dynamic redirect
+        to: "/post/list", // Dynamic redirect
       });
     } catch (err) {
-      setError("Invalid username or password");
     } finally {
-      setIsLoading(false);
     }
   };
 
@@ -145,7 +138,7 @@ function LoginComponent() {
               </form>
               <div className="bg-muted relative hidden md:block">
                 <img
-                  src="https://scontent.fhan4-6.fna.fbcdn.net/v/t39.30808-6/476062068_649306710829684_7978040770291002816_n.jpg?_nc_cat=109&_nc_cb=99be929b-ad57045b&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=z2gAii9SfeUQ7kNvwH3rW7e&_nc_oc=Adl2YfYZ6NUpOnrNlopQTrgap_4qnEuBuCJal0NCTSc5E4UD0XG8qz22wBp2AWcsv3w&_nc_zt=23&_nc_ht=scontent.fhan4-6.fna&_nc_gid=A1i_oejqS_XZTO0MFt1YfA&oh=00_Afk1zu6o_n115Ry7Favmar3SQx3hIr5HT31u07QTPKuwmg&oe=694EE78D"
+                  src="https://c.tenor.com/xTvpjzTNfZMAAAAd/despairiounge-cat.gif"
                   alt="Image"
                   className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />

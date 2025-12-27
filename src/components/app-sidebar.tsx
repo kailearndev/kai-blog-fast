@@ -15,9 +15,14 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { VersionSwitcher } from "@/components/version-switcher";
-import { Link } from "@tanstack/react-router";
+import {
+  Link,
+  useLocation,
+  useMatchRoute,
+  useParams,
+} from "@tanstack/react-router";
 import clsx from "clsx";
-import { Feather } from "lucide-react";
+import { Feather, TagIcon } from "lucide-react";
 import { NavUser } from "./nav-user";
 
 // This is sample data.
@@ -25,14 +30,20 @@ const data = {
   versions: ["1.0.0"],
   navMain: [
     {
-      title: "Post",
+      title: "Management",
 
       items: [
         {
-          title: "All Posts",
-          url: "/post/list",
-          isActive: true,
+          title: "Post",
+          url: "/post",
+
           icon: <Feather className={clsx("h-4 w-4")} />,
+        },
+        {
+          title: "Tag",
+          url: "/tag",
+
+          icon: <TagIcon className={clsx("h-4 w-4")} />,
         },
       ],
     },
@@ -58,14 +69,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={item.isActive}
-                      className={
-                        item.isActive ? "bg-gray-200 dark:bg-gray-700 " : ""
-                      }
-                    >
-                      <Link className="flex justify-between" to={item.url}>
+                    <SidebarMenuButton asChild>
+                      <Link
+                        activeProps={{
+                          className:
+                            "bg-gray-500 font-bold text-white duration-200 ",
+                        }}
+                        className="flex items-center p-2 rounded justify-between "
+                        to={item.url}
+                      >
                         {item.title} {item.icon}
                       </Link>
                     </SidebarMenuButton>

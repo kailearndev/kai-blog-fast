@@ -1,26 +1,27 @@
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
-import { usePosts } from "@/hooks/post/usePost";
-import { Link } from "@tanstack/react-router";
+
 import { PlusCircleIcon } from "lucide-react";
 import { columns } from "./components/columns";
 
 import { useTableState } from "@/hooks/useTablePaging";
+import { useTags } from "@/hooks/tag/useTag";
+import { useState } from "react";
+import Tag from "./tag";
 
-const ListPost = () => {
-  const { data } = usePosts();
+const Tags = () => {
+  const [createTagOpen, setCreateTagOpen] = useState(false);
+  const { data } = useTags();
   const tableState = useTableState();
   return (
-    <div>
-      <h1>List of Posts</h1>
+    <>
+      <h1>List of Tags</h1>
       <DataTable
         actions={
-          <Link to="/post/create-post">
-            <Button variant={"secondary"}>
-              Create New{" "}
-              <PlusCircleIcon className="animate-spin text-green-500" />
-            </Button>
-          </Link>
+          <Button variant={"secondary"} onClick={() => setCreateTagOpen(true)}>
+            Create New Tag{" "}
+            <PlusCircleIcon className="animate-spin text-green-500" />
+          </Button>
         }
         columns={columns}
         data={data.data || []}
@@ -28,8 +29,9 @@ const ListPost = () => {
         pagination={tableState.pagination}
         onPaginationChange={tableState.onPaginationChange}
       />
-    </div>
+      <Tag open={createTagOpen} onOpenChange={setCreateTagOpen} />
+    </>
   );
 };
 
-export default ListPost;
+export default Tags;

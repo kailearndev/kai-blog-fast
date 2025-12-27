@@ -58,7 +58,7 @@ const CreatePost = () => {
       toast.success("Post created successfully!");
       form.reset();
       router.navigate({
-        to: "/post/list",
+        to: "/post",
       });
     },
   });

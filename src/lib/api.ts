@@ -44,7 +44,12 @@ api.interceptors.response.use(
         case 400:
           // Bad Request: Thường do gửi sai dữ liệu (Validation)
           console.error("Data is not valid", data as unknown as string);
-          toast.error("Data is not valid");
+          if (data && typeof data === "object") {
+            const message = (
+              data as unknown as { data: { message: string; code: string } }
+            ).data.message;
+            toast.error(message || "Data is not valid");
+          }
           // Có thể hiện Toast thông báo lỗi cụ thể từ server trả về
           // toast.error(data.message || "Dữ liệu không hợp lệ");
           break;
