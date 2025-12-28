@@ -19,6 +19,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+import SelectTag from "./components/select-tab";
 const Editor = React.lazy(
   () => import("@/components/tiptap-templates/simple/simple-editor")
 );
@@ -36,7 +37,15 @@ const CreatePost = () => {
     slug: z.string().min(2, {
       message: "Slug must be at least 2 characters.",
     }),
-    thumbnail: z.string().url().optional(),
+    thumbnail: z.string().optional(),
+    tags: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+        })
+      )
+      .optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,6 +56,12 @@ const CreatePost = () => {
       slug: "",
       is_public: true,
       thumbnail: "",
+      tags: [
+        {
+          id: "",
+          name: "",
+        },
+      ],
     },
   });
 
@@ -105,7 +120,7 @@ const CreatePost = () => {
             control={form.control}
             name="slug"
             render={({ field }) => (
-              <FormItem className="grid col-span-3 lg:col-span-1  ">
+              <FormItem className="col-span-2 lg:col-span-1  ">
                 <FormLabel>Slug</FormLabel>
                 <FormControl>
                   <Input placeholder="post-slug" disabled value={field.value} />
@@ -119,9 +134,27 @@ const CreatePost = () => {
           />
           <FormField
             control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem className="col-span-1 lg:col-span-1  ">
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <SelectTag onChange={field.onChange} />
+                </FormControl>
+                <div>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="thumbnail"
             render={({ field }) => (
-              <FormItem className="grid  col-span-3 2xl:col-span-1">
+              <FormItem className="col-span-1 lg:col-span-2  ">
                 <FormLabel>Thumbnail</FormLabel>
                 <FormControl>
                   <InputUpload id={"thumbnail"} onChange={field.onChange} />
@@ -135,6 +168,7 @@ const CreatePost = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="content"

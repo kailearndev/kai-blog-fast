@@ -7,5 +7,10 @@ export interface IPost {
   created_at: string;
   updated_at: string;
   thumbnail?: string;
-  tags?: string[];
+  tags?: ITags[];
+}
+
+export interface ITags {
+  id: string;
+  name: string;
 }

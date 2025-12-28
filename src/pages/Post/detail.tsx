@@ -24,6 +24,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
+import SelectTag from "./components/select-tab";
 const Editor = React.lazy(
   () => import("@/components/tiptap-templates/simple/simple-editor")
 );
@@ -43,6 +44,14 @@ const PostDetail = ({ id }: { id: string }) => {
       message: "Slug must be at least 2 characters.",
     }),
     thumbnail: z.string().optional(),
+    tags: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+        })
+      )
+      .optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,7 +69,7 @@ const PostDetail = ({ id }: { id: string }) => {
       toast.success("Post updated successfully!");
       form.reset();
       router.navigate({
-        to: "/post/list",
+        to: "/post",
       });
     },
   });
@@ -114,6 +123,27 @@ const PostDetail = ({ id }: { id: string }) => {
                 </FormControl>
                 <div>
                   <FormDescription>Slug for landing page URL.</FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem className="col-span-1 lg:col-span-1  ">
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <SelectTag
+                    onChange={(val) => field.onChange(val)}
+                    defaultValue={field.value?.[0]?.id}
+                  />
+                </FormControl>
+                <div>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
                   <FormMessage />
                 </div>
               </FormItem>
