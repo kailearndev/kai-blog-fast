@@ -40,7 +40,7 @@ function LoginComponent() {
       await auth.login(email, password);
       // Navigate to the redirect URL using router navigation
       navigate({
-        to: "/post/list", // Dynamic redirect
+        to: "/post", // Dynamic redirect
       });
     } catch (err) {
     } finally {

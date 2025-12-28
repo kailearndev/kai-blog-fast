@@ -15,12 +15,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { VersionSwitcher } from "@/components/version-switcher";
-import {
-  Link,
-  useLocation,
-  useMatchRoute,
-  useParams,
-} from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import clsx from "clsx";
 import { Feather, TagIcon } from "lucide-react";
 import { NavUser } from "./nav-user";
