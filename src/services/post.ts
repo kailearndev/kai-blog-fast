@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import type { IPost } from "@/types/post-type";
+import type { CreatePostCTO, IPost, UpdatePostCTO } from "@/types/post-type";
 import type { PaginatedResponse } from "@/types/response";
 
 const getPosts = async (): Promise<PaginatedResponse<IPost>> => {
@@ -20,7 +20,7 @@ const getPostById = async (id: string): Promise<IPost> => {
   }
 };
 
-const createPost = async (postData: Partial<IPost>): Promise<IPost> => {
+const createPost = async (postData: CreatePostCTO): Promise<IPost> => {
   try {
     const response = await api.post("/admin/posts/", postData);
     return response.data;
@@ -31,7 +31,7 @@ const createPost = async (postData: Partial<IPost>): Promise<IPost> => {
 
 const updatePost = async (
   id: string,
-  postData: Partial<IPost>
+  postData: UpdatePostCTO
 ): Promise<IPost> => {
   try {
     const response = await api.put(`/admin/posts/${id}`, postData);

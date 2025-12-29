@@ -32,6 +32,7 @@ const PostDetail = ({ id }: { id: string }) => {
   const queryClient = useQueryClient();
   const { data } = useSuspenseQuery(postQueryOptions(id));
   const router = useRouter();
+
   const formSchema = z.object({
     title: z.string().min(2, {
       message: "Title must be at least 2 characters.",
@@ -44,26 +45,24 @@ const PostDetail = ({ id }: { id: string }) => {
       message: "Slug must be at least 2 characters.",
     }),
     thumbnail: z.string().optional(),
-    tags: z
-      .array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-        })
-      )
-      .optional(),
+    tags: z.array(z.string()).optional(),
+    summary: z.string().min(10).max(100, {
+      message: "Summary must be at least 10 characters.",
+    }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: standardSchemaResolver(formSchema),
-    values: data,
+    values: {
+      ...data,
+      tags: data.tags?.map((tag) => tag.id) || [],
+    },
   });
 
-  console.log(form.getValues());
+  const updatePost = useMutation({
+    mutationFn: (values: z.infer<typeof formSchema>) =>
+      PostService.updatePost(id, values),
 
-  const createPost = useMutation({
-    mutationFn: (data: z.infer<typeof formSchema>) =>
-      PostService.updatePost(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success("Post updated successfully!");
@@ -74,9 +73,12 @@ const PostDetail = ({ id }: { id: string }) => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
-    createPost.mutate(data);
+    updatePost.mutate({
+      ...values,
+      tags: values.tags,
+    });
   };
 
   return (
@@ -85,13 +87,13 @@ const PostDetail = ({ id }: { id: string }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-2 md:gap-x-6  gap-4 "
+          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-4 md:gap-x-6  gap-4 "
         >
           <FormField
             control={form.control}
             name="title"
             render={({ field }) => (
-              <FormItem className="">
+              <FormItem className="col-span-4  lg:col-span-2">
                 <FormLabel>Title</FormLabel>
                 <FormControl>
                   <Input
@@ -114,9 +116,27 @@ const PostDetail = ({ id }: { id: string }) => {
           />
           <FormField
             control={form.control}
+            name="summary"
+            render={({ field }) => (
+              <FormItem className="col-span-4 lg:col-span-2  ">
+                <FormLabel>Summary</FormLabel>
+                <FormControl>
+                  <Input placeholder="Post Summary" {...field} />
+                </FormControl>
+                <div>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="slug"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="col-span-4  lg:col-span-2 ">
                 <FormLabel>Slug</FormLabel>
                 <FormControl>
                   <Input placeholder="post-slug" disabled value={field.value} />
@@ -132,12 +152,12 @@ const PostDetail = ({ id }: { id: string }) => {
             control={form.control}
             name="tags"
             render={({ field }) => (
-              <FormItem className="col-span-1 lg:col-span-1  ">
+              <FormItem className="col-span-4 lg:col-span-2  ">
                 <FormLabel>Tags</FormLabel>
                 <FormControl>
                   <SelectTag
-                    onChange={(val) => field.onChange(val)}
-                    defaultValue={field.value?.[0]?.id}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
                   />
                 </FormControl>
                 <div>
@@ -153,7 +173,7 @@ const PostDetail = ({ id }: { id: string }) => {
             control={form.control}
             name="thumbnail"
             render={({ field }) => (
-              <FormItem className="grid  col-span-3 2xl:col-span-1">
+              <FormItem className="col-span-2 lg:col-span-2">
                 <FormLabel>Thumbnail</FormLabel>
                 <FormControl>
                   <InputUpload
@@ -175,7 +195,7 @@ const PostDetail = ({ id }: { id: string }) => {
             control={form.control}
             name="content"
             render={({ field }) => (
-              <FormItem className="col-span-3 ">
+              <FormItem className="col-span-4 ">
                 <FormLabel>Content</FormLabel>
                 <FormControl>
                   <React.Suspense fallback={<div>Loading editor...</div>}>

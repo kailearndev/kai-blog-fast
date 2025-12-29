@@ -1,16 +1,10 @@
 // src/lib/router.ts
-import { createRouter } from "@tanstack/react-router";
 import { QueryClient } from "@tanstack/react-query";
+import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "../routeTree.gen";
 
 // 1. Tạo QueryClient singleton
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60, // 1 phút
-    },
-  },
-});
+export const queryClient = new QueryClient();
 
 // 2. Tạo Router instance
 export const router = createRouter({

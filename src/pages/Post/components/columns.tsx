@@ -15,6 +15,7 @@ import type { IPost } from "@/types/post-type";
 import { Link } from "@tanstack/react-router";
 import { type ColumnDef } from "@tanstack/react-table";
 import { Edit2Icon, MoreHorizontal } from "lucide-react";
+import TagBadge from "./tag-badge";
 
 export const columns: ColumnDef<IPost>[] = [
   // {
@@ -49,6 +50,11 @@ export const columns: ColumnDef<IPost>[] = [
   {
     accessorKey: "title",
     header: "Title",
+  },
+  {
+    accessorKey: "tags",
+    header: "Tags",
+    cell: ({ row }) => <TagBadge tags={row.original.tags} />,
   },
   {
     accessorKey: "is_public",
@@ -92,7 +98,9 @@ export const columns: ColumnDef<IPost>[] = [
             <DeleteAction
               id={row.original.id}
               mutationFn={(id) =>
-                PostService.updatePost(id, { is_public: false })
+                PostService.updatePost(id, {
+                  is_public: false,
+                })
               }
               queryKey={["posts"]}
             />

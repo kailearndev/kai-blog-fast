@@ -38,14 +38,10 @@ const CreatePost = () => {
       message: "Slug must be at least 2 characters.",
     }),
     thumbnail: z.string().optional(),
-    tags: z
-      .array(
-        z.object({
-          id: z.string(),
-          name: z.string(),
-        })
-      )
-      .optional(),
+    tags: z.array(z.string()).optional(),
+    summary: z.string().min(10).max(100, {
+      message: "Summary must be at least 10 characters.",
+    }),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,18 +52,14 @@ const CreatePost = () => {
       slug: "",
       is_public: true,
       thumbnail: "",
-      tags: [
-        {
-          id: "",
-          name: "",
-        },
-      ],
+      tags: [],
+      summary: "",
     },
   });
 
   const createPost = useMutation({
-    mutationFn: (data: z.infer<typeof formSchema>) =>
-      PostService.createPost(data),
+    mutationFn: (values: z.infer<typeof formSchema>) =>
+      PostService.createPost(values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success("Post created successfully!");
@@ -78,9 +70,9 @@ const CreatePost = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
-    createPost.mutate(data);
+    createPost.mutate(values);
   };
 
   return (
@@ -89,7 +81,7 @@ const CreatePost = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-2 md:gap-x-6  gap-4 "
+          className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 md:gap-x-6  gap-4 "
         >
           <FormField
             control={form.control}
@@ -115,12 +107,29 @@ const CreatePost = () => {
               </FormItem>
             )}
           />
-
+          <FormField
+            control={form.control}
+            name="summary"
+            render={({ field }) => (
+              <FormItem className="col-span-2 lg:col-span-1  ">
+                <FormLabel>Summary</FormLabel>
+                <FormControl>
+                  <Input placeholder="Post Summary" {...field} />
+                </FormControl>
+                <div>
+                  <FormDescription>
+                    This is your public display name.
+                  </FormDescription>
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="slug"
             render={({ field }) => (
-              <FormItem className="col-span-2 lg:col-span-1  ">
+              <FormItem className="col-span-3 md:col-span-2 lg:col-span-1 ">
                 <FormLabel>Slug</FormLabel>
                 <FormControl>
                   <Input placeholder="post-slug" disabled value={field.value} />
@@ -136,10 +145,13 @@ const CreatePost = () => {
             control={form.control}
             name="tags"
             render={({ field }) => (
-              <FormItem className="col-span-1 lg:col-span-1  ">
+              <FormItem className="col-span-2 lg:col-span-1  ">
                 <FormLabel>Tags</FormLabel>
                 <FormControl>
-                  <SelectTag onChange={field.onChange} />
+                  <SelectTag
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  />
                 </FormControl>
                 <div>
                   <FormDescription>
@@ -154,7 +166,7 @@ const CreatePost = () => {
             control={form.control}
             name="thumbnail"
             render={({ field }) => (
-              <FormItem className="col-span-1 lg:col-span-2  ">
+              <FormItem className="col-span-2 lg:col-span-2">
                 <FormLabel>Thumbnail</FormLabel>
                 <FormControl>
                   <InputUpload id={"thumbnail"} onChange={field.onChange} />
