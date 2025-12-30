@@ -13,12 +13,7 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (search: Record<string, unknown>): { redirect?: string } => {
-    return {
-      redirect: (search.redirect as string) || undefined,
-    };
-  },
-  beforeLoad: ({ context, search }) => {
+  beforeLoad: ({ context }) => {
     // Redirect if already authenticated
     if (context.auth.isAuthenticated) {
       throw redirect({ to: "/post" });
