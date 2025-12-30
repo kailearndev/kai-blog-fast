@@ -10,14 +10,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 
-import { TagService } from "@/services/tag";
-import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
-import React from "react";
-import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import * as z from "zod";
 import {
   Form,
   FormControl,
@@ -27,6 +19,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useTagDetail } from "@/hooks/tag/useTag";
+import { TagService } from "@/services/tag";
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import * as z from "zod";
 
 interface TagProps {
   open: boolean;
