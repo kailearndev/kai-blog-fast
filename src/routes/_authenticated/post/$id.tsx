@@ -7,6 +7,7 @@ export const postQueryOptions = (postId: string) =>
   queryOptions({
     queryKey: ["post", postId],
     queryFn: () => PostService.getPostById(postId),
+    staleTime: 0,
   });
 
 export const Route = createFileRoute("/_authenticated/post/$id")({
