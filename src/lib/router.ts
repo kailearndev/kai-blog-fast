@@ -13,8 +13,6 @@ export const router = createRouter({
     auth: undefined!, // Sẽ được App.tsx bơm vào sau
     queryClient,
   },
-  defaultPreload: "intent",
-  defaultPreloadStaleTime: 0,
 });
 
 // 3. Register type
